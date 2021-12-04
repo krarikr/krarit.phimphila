@@ -1,0 +1,363 @@
+<?php
+
+    include_once('connect_db.php');
+    session_start();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ptksystem user </title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon.png">
+    <!-- Datatable -->
+    <link href="./vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+    <!-- Custom Stylesheet -->
+    <link href="./css/style.css" rel="stylesheet">
+    
+
+
+
+</head>
+
+<body>
+
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="sk-three-bounce">
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child sk-bounce3"></div>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header">
+            <a href="user_profile.php" class="brand-logo">
+                <img class="logo-abbr" src="./images/logo_ptk.png" height="40" alt="">
+                <img class="logo-compact" src="./images/brand_name.png" alt=""> 
+                <img class="brand-title" src="./images/brand_name.png" height="75%" alt="">
+            </a>
+
+            <div class="nav-control">
+                <div class="hamburger">
+                    <span class="line"></span><span class="line"></span><span class="line"></span>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+
+        <!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header">
+            <div class="header-content">
+                <nav class="navbar navbar-expand">
+                    <div class="collapse navbar-collapse justify-content-between">
+                        <!-- ส่วนค้นหา -->
+                        <div class="header-left">
+                        <h3 class="mt-2">โฟร์แมน : <?php echo $_SESSION['user_login']; ?></h3>
+                        </div> 
+
+                        <ul class="navbar-nav header-right">
+                            <li class="nav-item dropdown header-profile">
+                                <a class="nav-link" href="#" role="button" data-toggle="dropdown">
+                                    <i class="mdi mdi-account"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a href="logout.php" class="dropdown-item">
+                                        <i class="icon-key"></i>
+                                        <span class="ml-2">Logout </span>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        <div class="quixnav">
+            <div class="quixnav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li class="nav-label first">Main Menu</li>
+                    <li><a href="./user_profile.php" aria-expanded="false"><i
+                                class="icon icon-single-04"></i><span class="nav-text">ข้อมูลผู้ใช้งาน</span></a>
+                    </li>
+                    <li><a href="user_list.php" aria-expanded="false"><i
+                                class="icon icon-layout-25"></i><span class="nav-text">รายการวัสดุอุปกรณ์</span></a>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                                class="icon icon-app-store"></i><span class="nav-text">จัดทำรายการต่างๆ</span></a>
+                        <ul aria-expanded="false">
+                            <li><a href="user_stockout.php">เบิกอุปกรณ์</a></li>
+                            <li><a href="user_stockin.php">จัดเก็บอุปกรณ์</a></li>
+                            <li><a href="user_po.php">สั่งซื้ออุปกรณ์</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li><a  href="user_status.php" aria-expanded="false"><i
+                                class="icon icon-single-copy-06"></i><span class="nav-text">สถานะรายการ</span></a>
+                        
+                    </li>
+                                 
+                </ul>
+            </div>
+
+
+        </div>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h3>เบิกวัสดุอุปกรณ์</h3>
+                            <span class="ml-1">เบิกถอน วัสดุ/อุปกรณ์ สำหรับใช้ในไซต์งาน</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        
+                    </div>
+                </div>
+                <!-- row -->
+
+
+                <div class="row">
+
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">ตารางรายการวัสดุ/อุปกรณ์</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="example" class="display table" style="min-width: 845px">
+                                        <thead class="thead-primary">
+                                            <tr>
+                                                <th>รหัส</th>
+                                                <th>ประเภท</th>
+                                                <th>ชื่อ</th>
+                                                <th>ยี่ห้อ</th>
+                                                <th>สถานะ</th>
+                                                <th>จำนวน</th>
+                                                <th>เบิกวัสดุ/อุปกรณ์</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                              <!--**********************************
+            โชวตารางข้อมูลวัสดุอุปกรณ์ที่มี
+        ***********************************-->
+                                        <?php 
+                                             $select_material = $db->prepare("SELECT material.mat_serail, types.types_name, material.mat_name,  material.mat_brand,  material.mat_amount,  material.status_id FROM material INNER JOIN types ON material.type_id = types.id ");
+                                             $select_material->execute();
+
+                                             while ($row = $select_material->fetch(PDO::FETCH_ASSOC)) {
+                                                ?>
+                                                
+                                                    <tr>
+                                                        <td><?php echo $row["mat_serail"]; ?></td>
+                                                        <td><?php echo $row["types_name"]; ?></td>
+                                                        <td><?php echo $row["mat_name"]; ?></td>
+                                                        <td><?php echo $row["mat_brand"]; ?></td>
+                                                        <td><?php  
+                                                                if ($row["mat_amount"] > 0){
+                                                                ?>
+                                                                <span class="btn btn-outline-warning">มีของ</span>
+    
+                                                                <?php }else{?>
+    
+                                                                    <span class="btn btn-outline-danger">ไม่มีของ</span>
+    
+                                                                <?php } ?>
+                                                            
+                                                                
+                                                                
+                                                        </td>
+                                                        <td><?php echo $row["mat_amount"]; ?></td>
+                                                        <td><?php  
+                                                            if ($row["mat_amount"] > 0){
+                                                            ?>
+                                                            <a href="db_sto_add.php?pa_id=<?php $row["id"];?>" class="badge badge-primary">เบิก&nbsp;</a>
+
+                                                            <?php }else{?>
+
+                                                                <span class="badge badge-dark">หมด</span>
+
+                                                            <?php } ?></td>
+                                                        
+                                                    </tr>
+    
+    
+    
+                                                 <?php } ?>            
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>รหัส</th>
+                                                <th>ประเภท</th>
+                                                <th>ชื่อ</th>
+                                                <th>ยี่ห้อ</th>
+                                                <th>สถานะ</th>
+                                                <th>จำนวน</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">รายการวัสดุ/อุปกรณ์ที่เลือก</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="example2" class="display table" style="width:100%">
+                                        <thead class="thead-primary">
+                                            <tr>
+                                                <th>รหัส</th>
+                                                <th>ประเภท</th>
+                                                <th>ชื่อ</th>
+                                                <th>ยี่ห้อ</th>
+                                                <th class="col-2">จำนวน</th>
+                                                <th>ยกเลิก</th>
+                                            </tr>
+                                        </thead>
+                                        <form>
+                                        <tbody>
+                                        <?php 
+                                             $select_material = $db->prepare("SELECT order_list.od_mat_serail, types.types_name, order_list.od_mat_brand,  order_list.od_mat_name
+                                                                            FROM order_list INNER JOIN types ON order_list.od_mat_type_id = types.id ");
+                                             $select_material->execute();
+
+                                            while ($row = $select_material->fetch(PDO::FETCH_ASSOC)) {
+                                            ?>
+                                            
+                                                <tr>
+                                                    <td><?php echo $row["od_mat_serail"]; ?></td>
+                                                    <td><?php echo $row["types_name"]; ?></td>
+                                                    <td><?php echo $row["od_mat_name"]; ?></td>
+                                                    <td><?php echo $row["od_mat_brand"]; ?></td>
+                                                    <td><input type="text" name="quantity_sto" value="1" class="col-8"></td>
+                                                    <td><button class="badge badge-danger">ยกเลิก</button></td>
+                                                    
+                                                    
+                                                </tr>
+
+
+
+                                             <?php } ?>
+                                          
+                                        </tbody>
+                                        </form>
+                                        <tfoot>
+                                            <tr>
+                                                <th>รหัส</th>
+                                                <th>ประเภท</th>
+                                                <th>ชื่อ</th>
+                                                <th>ยี่ห้อ</th>
+                                                <th>จำนวน</th>
+                                                <th>ยกเลิก</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+
+                                </div>
+                                <br>
+                                <a href="user_stockout_add.php" class="btn btn-success col-12 mb-3 " >ยืนยันรายการที่เลือก</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+         <!-- /# ส่วนปิดคอนเทนเนอร์ -->
+
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p>บริษัทพัฒการ กรุ็ป จำกัด  1968</p>
+                <p>ออกแบบโดย <a href="#" target="_blank">Phimphila Karis</a></p> 
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
+        <!--**********************************
+           Support ticket button start
+        ***********************************-->
+
+        <!--**********************************
+           Support ticket button end
+        ***********************************-->
+
+
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    
+    <!-- Required vendors -->
+    <script src="./vendor/global/global.min.js"></script>
+    <script src="./js/quixnav-init.js"></script>
+    <script src="./js/custom.min.js"></script>
+
+
+
+    <!-- Datatable -->
+    <script src="./vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="./js/plugins-init/datatables.init.js"></script>
+
+    
+</body>
+
+</html>
